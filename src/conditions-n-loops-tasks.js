@@ -185,6 +185,41 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
+// function convertNumberToString(numberStr) {
+//   const words = {
+//     0: 'zero',
+//     1: 'one',
+//     2: 'two',
+//     3: 'three',
+//     4: 'four',
+//     5: 'five',
+//     6: 'six',
+//     7: 'seven',
+//     8: 'eight',
+//     9: 'nine',
+//     '-': 'minus',
+//     '.': 'point',
+//     ',': 'point',
+//   };
+
+//   let result = '';
+//   let addSpace = false;
+//   for (let i = 0; i < numberStr.length; i += 1) {
+//     const char = numberStr[i];
+//     if (char !== ' ' || addSpace) {
+//       if (words[char]) {
+//         result += (addSpace ? ' ' : '') + words[char];
+//         addSpace = true;
+//       } else {
+//         result += char;
+//         addSpace = false;
+//       }
+//     }
+//   }
+
+//   return result;
+// }
+
 function convertNumberToString(numberStr) {
   const words = {
     0: 'zero',
@@ -204,16 +239,27 @@ function convertNumberToString(numberStr) {
 
   let result = '';
   let addSpace = false;
+
   for (let i = 0; i < numberStr.length; i += 1) {
     const char = numberStr[i];
-    if (char !== ' ' || addSpace) {
-      if (words[char]) {
+
+    switch (char) {
+      case ' ':
+        if (addSpace) {
+          result += char;
+        }
+        addSpace = false;
+        break;
+      case '-':
+      case '.':
+      case ',':
         result += (addSpace ? ' ' : '') + words[char];
         addSpace = true;
-      } else {
-        result += char;
-        addSpace = false;
-      }
+        break;
+      default:
+        result += (addSpace ? ' ' : '') + words[+char];
+        addSpace = true;
+        break;
     }
   }
 
@@ -335,21 +381,20 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  // let totalSum = 0;
-  // for (let i = 0; i < arr.length; i += 1) {
-  //   totalSum += arr[i];
-  // }
-  // let leftSum = 0;
-  // for (let i = 0; i < arr.length; i += 1) {
-  //   totalSum -= arr[i];
-  //   if (leftSum === totalSum) {
-  //     return i;
-  //   }
-  //   leftSum += arr[i];
-  // }
-  // return -1;
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let totalSum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    totalSum += arr[i];
+  }
+  let leftSum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    totalSum -= arr[i];
+    if (leftSum === totalSum) {
+      return i;
+    }
+    leftSum += arr[i];
+  }
+  return -1;
 }
 
 /**
@@ -467,38 +512,8 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(str, iterations) {
-  const strLength = str.length;
-  // Convert string to array of characters
-  const characters = [];
-  for (let i = 0; i < strLength; i += 1) {
-    characters.push(str.charAt(i));
-  }
-
-  // Function to swap characters at given indices
-  function swapChars(i, j) {
-    const temp = characters[i];
-    characters[i] = characters[j];
-    characters[j] = temp;
-  }
-
-  for (let iter = 0; iter < iterations; iter += 1) {
-    let oddIndex = 1;
-    for (let i = 0; i < strLength - 1; i = +1) {
-      if (i % 2 === 0) {
-        swapChars(i, oddIndex);
-        oddIndex += 1;
-      }
-    }
-  }
-
-  // Convert array of characters back to string
-  let result = '';
-  for (let i = 0; i < strLength; i += 1) {
-    result += characters[i];
-  }
-
-  return result;
+function shuffleChar(/* str, iterations */) {
+  throw new Error('Not implemented');
 }
 
 /**
@@ -519,52 +534,7 @@ function shuffleChar(str, iterations) {
  * @returns {number} The nearest larger number, or original number if none exists.
  */
 function getNearestBigger(/* number */) {
-  // Function to convert number to array of digits
-  // function getDigits(num) {
-  //   const digits = [];
-  //   while (num > 0) {
-  //     digits.unshift(num % 10);
-  //     num = Math.floor(num / 10);
-  //   }
-  //   return digits;
-  // }
-  // // Function to convert array of digits to number
-  // function getNumber(digits) {
-  //   let num = 0;
-  //   for (let i = 0; i < digits.length; i++) {
-  //     num = num * 10 + digits[i];
-  //   }
-  //   return num;
-  // }
-  // // Convert number to array of digits
-  // const digits = getDigits(number);
-  // let i = digits.length - 2;
-  // while (i >= 0 && digits[i] >= digits[i + 1]) {
-  //   i--;
-  // }
-  // if (i === -1) {
-  //   return number; // If no such digit is found, return the original number
-  // }
-  // let j = digits.length - 1;
-  // while (digits[j] <= digits[i]) {
-  //   j--;
-  // }
-  // // Swap digits[i] and digits[j]
-  // const temp = digits[i];
-  // digits[i] = digits[j];
-  // digits[j] = temp;
-  // // Reverse the digits from i+1 to the end
-  // let start = i + 1;
-  // let end = digits.length - 1;
-  // while (start < end) {
-  //   const temp = digits[start];
-  //   digits[start] = digits[end];
-  //   digits[end] = temp;
-  //   start++;
-  //   end--;
-  // }
-  // // Convert array of digits back to number
-  // return getNumber(digits);
+  throw new Error('Not implemented');
 }
 
 module.exports = {
