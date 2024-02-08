@@ -232,37 +232,6 @@ function convertNumberToString(numberStr) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-// function isPalindrome(str) {
-//   let i = 0;
-//   let j = str.length - 1;
-
-//   // Skip leading whitespaces
-//   while (i < str.length && str[i] === ' ') {
-//     i += 1;
-//   }
-
-//   // Skip trailing whitespaces
-//   while (j >= 0 && str[j] === ' ') {
-//     j -= 1;
-//   }
-
-//   // Check if remaining characters form a palindrome
-//   while (i < j) {
-//     if (str[i] !== str[j]) {
-//       return false;
-//     }
-//     i += 1;
-//     j -= 1;
-//     // Skip whitespaces within the string
-//     while (i < str.length && str[i] === ' ') {
-//       i += 1;
-//     }
-//     while (j >= 0 && str[j] === ' ') {
-//       j -= 1;
-//     }
-//   }
-//   return true;
-// }
 
 function isPalindrome(str) {
   let i = 0;
