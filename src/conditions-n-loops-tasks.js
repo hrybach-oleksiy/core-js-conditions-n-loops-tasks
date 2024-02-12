@@ -185,40 +185,6 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-// function convertNumberToString(numberStr) {
-//   const words = {
-//     0: 'zero',
-//     1: 'one',
-//     2: 'two',
-//     3: 'three',
-//     4: 'four',
-//     5: 'five',
-//     6: 'six',
-//     7: 'seven',
-//     8: 'eight',
-//     9: 'nine',
-//     '-': 'minus',
-//     '.': 'point',
-//     ',': 'point',
-//   };
-
-//   let result = '';
-//   let addSpace = false;
-//   for (let i = 0; i < numberStr.length; i += 1) {
-//     const char = numberStr[i];
-//     if (char !== ' ' || addSpace) {
-//       if (words[char]) {
-//         result += (addSpace ? ' ' : '') + words[char];
-//         addSpace = true;
-//       } else {
-//         result += char;
-//         addSpace = false;
-//       }
-//     }
-//   }
-
-//   return result;
-// }
 
 function convertNumberToString(numberStr) {
   const words = {
@@ -381,19 +347,23 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
+
 function getBalanceIndex(arr) {
-  let totalSum = 0;
-  for (let i = 0; i < arr.length; i += 1) {
-    totalSum += arr[i];
-  }
+  if (arr.length < 3) return -1;
+
   let leftSum = 0;
+  let rightSum = 0;
+
   for (let i = 0; i < arr.length; i += 1) {
-    totalSum -= arr[i];
-    if (leftSum === totalSum) {
-      return i;
-    }
+    rightSum += arr[i];
+  }
+
+  for (let i = 0; i < arr.length; i += 1) {
+    rightSum -= arr[i];
+    if (leftSum === rightSum) return i;
     leftSum += arr[i];
   }
+
   return -1;
 }
 
@@ -512,10 +482,33 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
-}
 
+function shuffleChar(str, iterations) {
+  if (str.length === 0 || iterations === 0) {
+    return '';
+  }
+
+  const len = str.length;
+
+  const moveOddToEnd = (string) => {
+    let result = '';
+    for (let i = 0; i < len; i += 2) {
+      result += string[i];
+    }
+    for (let i = 1; i < len; i += 2) {
+      result += string[i];
+    }
+    return result;
+  };
+
+  let shuffledStr = str;
+
+  for (let i = 0; i < iterations; i += 1) {
+    shuffledStr = moveOddToEnd(shuffledStr);
+  }
+
+  return shuffledStr;
+}
 /**
  * Returns the nearest largest integer consisting of the digits of the given positive integer.
  * If there is no such number, it returns the original number.
@@ -533,8 +526,54 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+
+function getNearestBigger(number) {
+  const digits = [];
+  let num = number;
+
+  while (num > 0) {
+    digits.unshift(num % 10);
+    num = Math.floor(num / 10);
+  }
+
+  let i = digits.length - 2;
+
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) {
+    return number;
+  }
+
+  let j = digits.length - 1;
+
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  let temp = digits[i];
+  digits[i] = digits[j];
+  digits[j] = temp;
+
+  let left = i + 1;
+  let right = digits.length - 1;
+
+  while (left < right) {
+    temp = digits[left];
+    digits[left] = digits[right];
+    digits[right] = temp;
+    left += 1;
+    right -= 1;
+  }
+
+  let result = 0;
+
+  for (let k = 0; k < digits.length; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
